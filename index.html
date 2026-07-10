@@ -18,6 +18,7 @@
     justify-content: space-between;
     padding: 3rem 1.25rem 3rem;
     color: #fff;
+    gap: 2rem;
   }
   h1 {
     font-family: 'Fredoka', sans-serif;
@@ -26,6 +27,53 @@
     text-align: center;
     text-shadow: 0 2px 8px rgba(0,0,0,0.15);
   }
+
+  /* ===== MENU ===== */
+  .menu-card {
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 20px;
+    padding: 1.75rem 2rem;
+    width: 100%;
+    max-width: 420px;
+    backdrop-filter: blur(4px);
+  }
+  .menu-title {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.25rem;
+    letter-spacing: .02em;
+  }
+  .menu-section-title {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: .75rem;
+    opacity: .85;
+    border-bottom: 1px solid rgba(255,255,255,0.35);
+    padding-bottom: .4rem;
+  }
+  .menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .55rem 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+  .menu-item:last-child { border-bottom: none; }
+  .menu-item .price {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  /* ===== BUTTON ===== */
   .rate-btn {
     background: #fff;
     color: #FF8C00;
@@ -47,6 +95,24 @@
 </head>
 <body>
   <h1>⭐ Ratings Project</h1>
+
+  <div class="menu-card">
+    <div class="menu-title">Menu</div>
+    <div class="menu-section-title">Spa / Massage</div>
+    <div class="menu-item">
+      <span>5 min</span>
+      <span class="price">$1.00 USD</span>
+    </div>
+    <div class="menu-item">
+      <span>10 min</span>
+      <span class="price">$42.00 USD</span>
+    </div>
+    <div class="menu-item">
+      <span>15 min</span>
+      <span class="price">$2.50 USD</span>
+    </div>
+  </div>
+
   <a href="reviews.html" class="rate-btn">Rate Us!</a>
 </body>
 </html>
