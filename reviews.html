@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reviews — Ratings Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky-top: #5bc8f5;
+    --sky-bottom: #a8e6ff;
+    --ink: #1a2e3b;
+    --soft-ink: #4a6070;
+    --card-bg: #fffdf7;
+    --sun: #FFD93D;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(160deg, var(--sky-top) 0%, var(--sky-bottom) 40%, #e8f7e0 100%);
+    min-height: 100vh;
+    color: var(--ink);
+  }
+
+  /* ===== HEADER ===== */
+  .page-header {
+    background: rgba(255,247,232,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid #ffe3a8;
+    padding: .75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .back-btn {
+    text-decoration: none;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--ink);
+    background: none;
+    border: 2px solid #ffe3a8;
+    border-radius: 999px;
+    padding: .4rem 1rem;
+    cursor: pointer;
+    transition: background .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+  }
+  .back-btn:hover { background: #ffe3a8; }
+  .page-title {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  /* ===== MAIN CONTENT ===== */
+  .main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+  }
+  .hero-text {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .hero-text h1 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: .4rem;
+  }
+  .hero-text p {
+    color: var(--soft-ink);
+    font-size: 1.05rem;
+  }
+
+  /* ===== FORM ===== */
+  .review-form {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 1.75rem;
+    box-shadow: 0 4px 24px rgba(31,45,61,.12);
+    margin-bottom: 2.5rem;
+    border: 2px solid #ffe3a8;
+  }
+  .review-form h2 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+  }
+  .field { margin-bottom: 1.1rem; }
+  .field label {
+    display: block;
+    font-weight: 700;
+    font-size: .95rem;
+    margin-bottom: .35rem;
+    color: var(--ink);
+  }
+  .field input, .field textarea {
+    width: 100%;
+    padding: .6rem .85rem;
+    border: 2px solid #ffe3a8;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    color: var(--ink);
+    background: #fffef9;
+    transition: border-color .15s;
+    outline: none;
+  }
+  .field input:focus, .field textarea:focus { border-color: #5bc8f5; }
+  .field textarea { resize: vertical; min-height: 90px; }
+
+  /* Star rating slider */
+  .star-slider-wrap { display: flex; flex-direction: column; gap: .5rem; margin-top: .2rem; overflow: visible; }
+  #starSlider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: calc(100% + 22px);
+    margin: 0 -11px;
+    height: 8px;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    background: linear-gradient(to right, #FFD93D 50%, #ddd 50%);
+  }
+  #starSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #FFD93D;
+    border: 2px solid #b07a20;
+    cursor: pointer;
+  }
+  #starSlider::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #FFD93D;
+    border: 2px solid #b07a20;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+  #starSlider::-moz-range-track {
+    height: 8px;
+    border-radius: 4px;
+    background: transparent;
+  }
+  .star-slider-display { display: flex; align-items: center; gap: .75rem; }
+  #starValue {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #b07a20;
+    min-width: 2.5rem;
+  }
+  .partial-stars {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+  .partial-stars .bg { color: #ddd; }
+  .partial-stars .fg {
+    position: absolute;
+    top: 0; left: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #FFD93D;
+  }
+
+  .submit-btn {
+    background: linear-gradient(135deg, #2A9D8F, #1a7a6e);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: .7rem 2rem;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .12s, box-shadow .12s;
+    box-shadow: 0 4px 12px rgba(42,157,143,.35);
+    width: 100%;
+    margin-top: .5rem;
+  }
+  .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(42,157,143,.45); }
+  .submit-btn:active { transform: translateY(0); }
+
+  /* ===== REVIEWS LIST ===== */
+  .reviews-section h2 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.6rem;
+    margin-bottom: 1.1rem;
+  }
+  .no-reviews {
+    text-align: center;
+    color: var(--soft-ink);
+    font-size: 1rem;
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 2px dashed #ffe3a8;
+  }
+  .review-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 1.25rem 1.4rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 12px rgba(31,45,61,.09);
+    border: 2px solid #ffe3a8;
+  }
+  .review-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .4rem;
+    flex-wrap: wrap;
+    gap: .4rem;
+  }
+  .reviewer-name {
+    font-weight: 800;
+    font-size: 1.05rem;
+  }
+  .review-stars { font-size: 1.15rem; letter-spacing: .05em; }
+  .review-date { font-size: .8rem; color: var(--soft-ink); }
+  .review-text { font-size: .97rem; line-height: 1.55; color: var(--soft-ink); }
+
+  .toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #2A9D8F;
+    color: #fff;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: .7rem 1.6rem;
+    border-radius: 999px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.18);
+    transition: transform .35s ease;
+    z-index: 999;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<header class="page-header">
+  <a href="index.html" class="back-btn">← Back</a>
+  <span class="page-title">⭐ Reviews</span>
+</header>
+
+<main class="main">
+  <div class="hero-text">
+    <h1>What do you think? 🌟</h1>
+    <p>Tell us what you loved — we'd love to hear from you!</p>
+  </div>
+
+  <div class="review-form">
+    <h2>Leave a review</h2>
+    <div class="field">
+      <label for="reviewerName">Your name (or nickname)</label>
+      <input type="text" id="reviewerName" placeholder="" maxlength="50">
+    </div>
+    <div class="field">
+      <label for="starSlider">Star rating</label>
+      <div class="star-slider-wrap">
+        <input type="range" id="starSlider" min="0" max="5" step="0.1" value="3">
+        <div class="star-slider-display">
+          <span id="starValue">3.0</span>
+          <span id="starPreview"></span>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label for="reviewText">Your review</label>
+      <textarea id="reviewText" placeholder="What was your favorite part?" maxlength="400"></textarea>
+    </div>
+    <button class="submit-btn" id="submitBtn">Submit Review 🎉</button>
+  </div>
+
+  <div class="reviews-section">
+    <h2>All reviews</h2>
+    <div id="reviewsList"></div>
+  </div>
+</main>
+
+<div class="toast" id="toast">Review saved! Thank you 🎉</div>
+
+<script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyCjd4LhS5mv07EX52Gm6xlnaEeeH7DpeOw",
+    authDomain: "ratings-project-9c7b4.firebaseapp.com",
+    projectId: "ratings-project-9c7b4",
+    storageBucket: "ratings-project-9c7b4.firebasestorage.app",
+    messagingSenderId: "942082956832",
+    appId: "1:942082956832:web:731f4e0ed6ac7b5b546645"
+  };
+  firebase.initializeApp(firebaseConfig);
+  var db = firebase.firestore();
+
+  var selectedStars = 3.0;
+
+  function renderStars(rating) {
+    var r = parseFloat(rating);
+    if (r <= 0) return '<span class="partial-stars"><span class="bg">★★★★★</span></span>';
+    if (r >= 5) return '<span class="partial-stars"><span class="bg" style="color:#FFD93D">★★★★★</span></span>';
+    var pct = (r / 5 * 100).toFixed(2);
+    return '<span class="partial-stars">' +
+      '<span class="bg">★★★★★</span>' +
+      '<span class="fg" style="width:' + pct + '%">★★★★★</span>' +
+    '</span>';
+  }
+
+  var starSlider = document.getElementById('starSlider');
+  var starValueEl = document.getElementById('starValue');
+  var starPreview = document.getElementById('starPreview');
+
+  function syncSlider() {
+    selectedStars = parseFloat(starSlider.value);
+    var pct = (selectedStars / 5 * 100).toFixed(2);
+    starSlider.style.background = 'linear-gradient(to right, #FFD93D ' + pct + '%, #ddd ' + pct + '%)';
+    starValueEl.textContent = selectedStars.toFixed(1);
+    starPreview.innerHTML = renderStars(selectedStars);
+  }
+  starSlider.addEventListener('input', syncSlider);
+  syncSlider();
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function renderCard(r) {
+    var rating = parseFloat(r.stars).toFixed(1);
+    return '<div class="review-card">' +
+      '<div class="review-card-top">' +
+        '<span class="reviewer-name">' + escHtml(r.name) + '</span>' +
+        '<span class="review-stars">' + renderStars(r.stars) + ' <span style="font-size:.85rem;font-weight:700;color:#b07a20">' + rating + '</span></span>' +
+        '<span class="review-date">' + escHtml(r.date) + '</span>' +
+      '</div>' +
+      '<div class="review-text">' + escHtml(r.text) + '</div>' +
+    '</div>';
+  }
+
+  function loadReviews() {
+    var list = document.getElementById('reviewsList');
+    list.innerHTML = '<div style="text-align:center;padding:1rem;color:#4a6070">Loading reviews...</div>';
+    db.collection('reviews').orderBy('timestamp', 'desc').get().then(function(snapshot) {
+      var reviews = [];
+      snapshot.forEach(function(doc) { reviews.push(doc.data()); });
+      list.innerHTML = reviews.length ? reviews.map(renderCard).join('') :
+        '<div class="no-reviews">No reviews yet — be the first! 🌟</div>';
+    }).catch(function() {
+      list.innerHTML = '<div class="no-reviews">No reviews yet — be the first! 🌟</div>';
+    });
+  }
+
+  document.getElementById('submitBtn').addEventListener('click', function() {
+    var name = document.getElementById('reviewerName').value.trim() || 'Anonymous';
+    var text = document.getElementById('reviewText').value.trim();
+    if (!text) { alert('Please write something in your review!'); return; }
+    var now = new Date();
+    var date = now.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+    db.collection('reviews').add({
+      name: name,
+      stars: selectedStars,
+      text: text,
+      date: date,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(function() {
+      document.getElementById('reviewerName').value = '';
+      document.getElementById('reviewText').value = '';
+      starSlider.value = 0;
+      syncSlider();
+      btn.disabled = false;
+      btn.textContent = 'Submit Review 🎉';
+      loadReviews();
+      var toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(function() { toast.classList.remove('show'); }, 2500);
+    }).catch(function() {
+      btn.disabled = false;
+      btn.textContent = 'Submit Review 🎉';
+      alert('Couldn\'t save your review. Please try again!');
+    });
+  });
+
+  loadReviews();
+</script>
+</body>
+</html>
