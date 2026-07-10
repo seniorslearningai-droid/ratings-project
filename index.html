@@ -91,6 +91,60 @@
   }
   .rate-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(0,0,0,0.28); }
   .rate-btn:active { transform: translateY(0); }
+
+  /* ===== ICICLES ===== */
+  .icicle-row {
+    position: fixed;
+    display: flex;
+    align-items: flex-start;
+    pointer-events: none;
+    z-index: 200;
+  }
+  .icicle-row.top    { top: 0; left: 0; right: 0; flex-direction: row; justify-content: space-around; }
+  .icicle-row.bottom { bottom: 0; left: 0; right: 0; flex-direction: row; justify-content: space-around; align-items: flex-end; transform: rotate(180deg); }
+  .icicle-row.left   { top: 0; left: 0; bottom: 0; flex-direction: column; justify-content: space-around; align-items: flex-start; writing-mode: vertical-lr; }
+  .icicle-row.right  { top: 0; right: 0; bottom: 0; flex-direction: column; justify-content: space-around; align-items: flex-end; transform: rotate(180deg); }
+  .icicle {
+    display: inline-block;
+    width: var(--w, 14px);
+    height: var(--h, 55px);
+    background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(210,245,255,0.92) 60%, rgba(180,235,255,0.75) 100%);
+    border-radius: 0 0 40% 40%;
+    position: relative;
+    box-shadow: inset 3px 0 5px rgba(255,255,255,0.6), 2px 0 8px rgba(180,235,255,0.3);
+    flex-shrink: 0;
+  }
+  .icicle::after {
+    content: '';
+    position: absolute;
+    bottom: calc(-1 * var(--w, 14px) * 0.6);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: calc(var(--w, 14px) / 2) solid transparent;
+    border-right: calc(var(--w, 14px) / 2) solid transparent;
+    border-top: calc(var(--w, 14px) * 0.65) solid rgba(180,235,255,0.78);
+  }
+  .icicle-row.left  .icicle,
+  .icicle-row.right .icicle { width: var(--h, 55px); height: var(--w, 14px); border-radius: 0 40% 40% 0; }
+  .icicle-row.left  .icicle::after,
+  .icicle-row.right .icicle::after {
+    bottom: auto; left: auto;
+    right: calc(-1 * var(--w, 14px) * 0.6);
+    top: 50%; transform: translateY(-50%);
+    border-top: calc(var(--w, 14px) / 2) solid transparent;
+    border-bottom: calc(var(--w, 14px) / 2) solid transparent;
+    border-left: calc(var(--w, 14px) * 0.65) solid rgba(180,235,255,0.78);
+    border-right: none;
+  }
+  @keyframes drip {
+    0%   { transform: scaleY(1); }
+    90%  { transform: scaleY(1); }
+    95%  { transform: scaleY(1.08); }
+    100% { transform: scaleY(1); }
+  }
+  .icicle { animation: drip calc(var(--d, 4s)) ease-in-out infinite; transform-origin: top center; }
 </style>
 </head>
 <body>
@@ -127,5 +181,29 @@
   </div>
 
   <a href="reviews.html" class="rate-btn">Rate Us!</a>
+
+  <div class="icicle-row top"    id="iceTop"></div>
+  <div class="icicle-row bottom" id="iceBot"></div>
+  <div class="icicle-row left"   id="iceLeft"></div>
+  <div class="icicle-row right"  id="iceRight"></div>
+
+  <script>
+    function makeIcicles(id, count, horizontal) {
+      var row = document.getElementById(id);
+      for (var i = 0; i < count; i++) {
+        var el = document.createElement('div');
+        el.className = 'icicle';
+        var w = 10 + Math.floor(Math.random() * 14);
+        var h = 35 + Math.floor(Math.random() * 65);
+        var d = (3 + Math.random() * 5).toFixed(1);
+        el.style.cssText = '--w:' + w + 'px;--h:' + h + 'px;--d:' + d + 's;';
+        row.appendChild(el);
+      }
+    }
+    makeIcicles('iceTop',   22, true);
+    makeIcicles('iceBot',   22, true);
+    makeIcicles('iceLeft',  10, false);
+    makeIcicles('iceRight', 10, false);
+  </script>
 </body>
 </html>
