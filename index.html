@@ -26,10 +26,14 @@
     font-weight: 700;
     text-align: center;
     text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    position: relative;
+    z-index: 1;
   }
 
   /* ===== MENU ===== */
   .menu-card {
+    position: relative;
+    z-index: 1;
     background: rgba(255,255,255,0.15);
     border: 2px solid rgba(255,255,255,0.4);
     border-radius: 20px;
@@ -75,6 +79,8 @@
 
   /* ===== BUTTON ===== */
   .rate-btn {
+    position: relative;
+    z-index: 1;
     background: #fff;
     color: #FF8C00;
     border: none;
@@ -98,7 +104,7 @@
     display: flex;
     align-items: flex-start;
     pointer-events: none;
-    z-index: 200;
+    z-index: 0;
   }
   .icicle-row.top    { top: 0; left: 0; right: 0; flex-direction: row; justify-content: space-around; }
   .icicle-row.bottom { bottom: 0; left: 0; right: 0; flex-direction: row; justify-content: space-around; align-items: flex-end; transform: rotate(180deg); }
